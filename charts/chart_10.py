@@ -2,43 +2,71 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
-    图10：不同压力水平下的睡眠质量分布（箱线图）
+    不同职业的睡眠障碍类型分布对比（百分比分组柱状图）
+    等价于原始 三.10.py
     """
 
-    df_plot = df[['Stress Level', 'Quality of Sleep']].dropna().copy()
+    # 1️⃣ 只保留样本量最多的前 8 个职业
+    top_occupations = (
+        df['Occupation']
+        .value_counts()
+        .head(8)
+        .index
+    )
+    df_filtered = df[df['Occupation'].isin(top_occupations)]
 
-    # 合理范围过滤
-    df_plot = df_plot[
-        df_plot['Stress Level'].between(1, 10) &
-        df_plot['Quality of Sleep'].between(1, 10)
-    ]
-
-    # 压力分组
-    df_plot['压力分组'] = pd.cut(
-        df_plot['Stress Level'],
-        bins=[0, 3, 6, 10],
-        labels=['低压力', '中压力', '高压力']
+    # 2️⃣ 构建交叉表（职业 × 睡眠障碍类型，占比）
+    cross_tab = (
+        pd.crosstab(
+            df_filtered['Occupation'],
+            df_filtered['Sleep Disorder'],
+            normalize='index'
+        ) * 100
     )
 
-    fig, ax = plt.subplots(figsize=(8, 6))
+    # 3️⃣ 画图（严格还原原图）
+    fig, ax = plt.subplots(figsize=(14, 8))
 
-    df_plot.boxplot(
-        column='Quality of Sleep',
-        by='压力分组',
+    cross_tab.plot(
+        kind='bar',
         ax=ax,
-        grid=False
+        width=0.8,
+        color=['#FF6B6B', '#4ECDC4'],
+        edgecolor='black',
+        linewidth=0.5
     )
 
-    ax.set_title("不同压力水平下的睡眠质量分布", fontsize=14, fontweight='bold')
-    ax.set_xlabel("压力水平分组")
-    ax.set_ylabel("睡眠质量（1–10）")
+    ax.set_title(
+        '不同职业的睡眠障碍类型分布对比',
+        fontsize=16,
+        fontweight='bold',
+        pad=20
+    )
+    ax.set_xlabel('职业', fontsize=14)
+    ax.set_ylabel('占比（%）', fontsize=14)
 
-    # 去掉 pandas 自动生成的副标题
-    plt.suptitle("")
+    ax.legend(
+        title='睡眠障碍类型',
+        fontsize=12,
+        title_fontsize=13
+    )
+
+    ax.set_xticklabels(
+        ax.get_xticklabels(),
+        rotation=45,
+        ha='right',
+        fontsize=11
+    )
+    ax.tick_params(axis='y', labelsize=11)
 
     ax.grid(axis='y', linestyle='--', alpha=0.3)
 
-    fig.tight_layout()
+    # 4️⃣ 百分比标签（原图关键点）
+    for container in ax.containers:
+        ax.bar_label(container, fmt='%.1f%%', fontsize=9, padding=3)
+
+    plt.tight_layout()
+
     return fig
