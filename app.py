@@ -1,13 +1,12 @@
 # app.py
-from utils.fonts import setup_chinese_font
-
-setup_chinese_font()
 import streamlit as st
-from utils.data import load_data
-from utils.fonts import setup_chinese_font
 
-# ===== 中文字体 =====
+# ===== 中文字体（只初始化一次）=====
+from utils.fonts import setup_chinese_font
 setup_chinese_font()
+
+# ===== 数据加载 =====
+from utils.data import load_data
 
 # ===== 页面配置 =====
 st.set_page_config(
@@ -17,7 +16,9 @@ st.set_page_config(
 
 st.title("睡眠健康数据分析与可视化系统")
 
-# ===== 上传数据 =====
+# ======================================================
+# 数据上传
+# ======================================================
 uploaded_file = st.file_uploader(
     "请上传【已完成预处理】的睡眠健康数据 CSV 文件",
     type="csv"
@@ -27,32 +28,42 @@ if uploaded_file is None:
     st.info("👆 请先上传 CSV 文件后再进行分析")
     st.stop()
 
-# ===== 加载数据 =====
+# ======================================================
+# 数据加载
+# ======================================================
 df = load_data(uploaded_file)
 st.success(f"数据加载成功，共 {len(df)} 条记录")
 
-# ===== 图表选择 =====
+# ======================================================
+# 图表选择
+# ======================================================
 chart_map = {
     "01 身体活动 × 睡眠质量": "charts.chart_01",
     "02 睡眠时长 × 睡眠质量（职业）": "charts.chart_02",
     "03 每日步数 × 压力（性别）": "charts.chart_03",
     "04 性别 × 睡眠质量": "charts.chart_04",
-    "05 年龄 × 睡眠时长密度": "charts.chart_05",
-    "06 活动 × 心率": "charts.chart_06",
-    "07 年龄 × 睡眠障碍": "charts.chart_07",
-    "08 活动 × 睡眠质量（气泡）": "charts.chart_08",
+    "05 年龄 × 睡眠时长分布": "charts.chart_05",
+    "06 身体活动 × 心率": "charts.chart_06",
+    "07 年龄 × 睡眠障碍类型": "charts.chart_07",
+    "08 身体活动 × 睡眠质量（气泡图）": "charts.chart_08",
     "09 睡眠质量 × 血压": "charts.chart_09",
-    "10 压力 × 睡眠质量": "charts.chart_10",
-    "11 睡眠障碍 × 睡眠时长": "charts.chart_11",
-    "12 年龄 × 睡眠质量": "charts.chart_12",
-    "13 综合分析": "charts.chart_13",
+    "10 不同职业的睡眠障碍分布（百分比）": "charts.chart_10",
+    "11 压力 × 睡眠时长 × 睡眠质量（三维气泡）": "charts.chart_11",
+    "12 BMI × 活动水平 × 睡眠质量（箱线图）": "charts.chart_12",
+    "13 综合分析（2×2 总览）": "charts.chart_13",
 }
 
-option = st.selectbox("请选择要查看的图表：", list(chart_map.keys()))
+option = st.selectbox(
+    "请选择要查看的图表：",
+    list(chart_map.keys())
+)
 
-# ===== 动态加载并绘图 =====
+# ======================================================
+# 动态加载并绘图（统一 render 接口）
+# ======================================================
 module_path = chart_map[option]
-module = __import__(module_path, fromlist=["plot"])
-fig = module.plot(df)
+module = __import__(module_path, fromlist=["render"])
 
-st.pyplot(fig)
+fig = module.render(df)
+
+st.pyplot(fig, use_container_width=True)
