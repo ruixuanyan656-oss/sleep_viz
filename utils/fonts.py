@@ -4,10 +4,14 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager, rcParams
 
 def setup_chinese_font():
-    """
-    全局设置中文字体（Windows）
-    """
-    font_path = r"C:\Windows\Fonts\simhei.ttf"
+    font_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "assets",
+        "fonts",
+        "simhei.ttf"
+    )
+    font_path = os.path.abspath(font_path)
 
     if os.path.exists(font_path):
         font_manager.fontManager.addfont(font_path)

@@ -1,4 +1,7 @@
 # app.py
+from utils.fonts import setup_chinese_font
+
+setup_chinese_font()
 import streamlit as st
 from utils.data import load_data
 from utils.fonts import setup_chinese_font
