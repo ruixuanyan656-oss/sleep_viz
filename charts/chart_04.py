@@ -2,7 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图04：不同性别的平均睡眠质量对比（含标准差）
     """

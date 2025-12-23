@@ -2,7 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图09：睡眠质量与收缩压（SBP）的关系
     """

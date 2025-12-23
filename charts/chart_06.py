@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图06：身体活动水平与心率的关系（散点 + 趋势线）
     """

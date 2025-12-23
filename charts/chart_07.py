@@ -2,7 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图07：不同年龄段的睡眠障碍风险分布（堆叠柱状图）
     """

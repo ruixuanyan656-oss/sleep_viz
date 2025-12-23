@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-def plot(df: pd.DataFrame, top_n: int = 6):
+def render(df: pd.DataFrame, top_n: int = 6):
     """
     图02：睡眠时长与睡眠质量的关系（按职业分类）
     输入：

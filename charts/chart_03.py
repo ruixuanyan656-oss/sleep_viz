@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图03：每日步数与压力水平的关系（按性别分组箱线图）
     输入：df（已完成预处理）

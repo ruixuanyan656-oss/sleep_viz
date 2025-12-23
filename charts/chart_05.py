@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图05：年龄与睡眠时长的分布密度（KDE + 散点）
     """

@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图01：BMI类别与睡眠障碍分布（百分比堆叠柱状图）
     输入：df（已完成预处理）

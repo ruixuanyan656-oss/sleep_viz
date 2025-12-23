@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot(df: pd.DataFrame):
+def render(df: pd.DataFrame):
     """
     图08：身体活动水平与睡眠质量（气泡=每日步数，按睡眠障碍分组）
     """
